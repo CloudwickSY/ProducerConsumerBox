@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+
 /**
  * This is an implementation of Box with a single element for 
  * message communication between threads.
@@ -5,14 +7,15 @@
  *
  */
 public class Box {
-	private String message;
-	private boolean isEmpty;
+	private LinkedList <String> messages;
+	int maxQueueSize;
 	
 	/**
-	 * Initialize isEmpty to true, since none has writen yet
+	 * Initialize isEmpty to true, since none has written yet
 	 */
 	Box(){
-		isEmpty = true;
+		this.messages = new LinkedList<String>();
+		this.maxQueueSize = 10;
 	}
 	
 	/**
@@ -20,14 +23,14 @@ public class Box {
 	 * @return
 	 */
 	public synchronized String take(){
-		while(isEmpty){
+		while(messages.isEmpty()){
 			try{
 				wait();
 			}catch (InterruptedException e){
 				System.out.println("oops..");
 			}
 		}
-		isEmpty = true;
+		String message = messages.pop();
 		notifyAll();
 		return message;
 	}
@@ -37,15 +40,14 @@ public class Box {
 	 * @param message
 	 */
 	public synchronized void put(String message){
-		while(!isEmpty){
+		while(messages.size()>=maxQueueSize){
 			try{
 				wait();
 			}catch (InterruptedException e){
 				System.out.println("oops..");
 			}
 		}
-		this.message = message;
-		isEmpty = false;
+		this.messages.push(message);
 		notifyAll();
 	}
 }
