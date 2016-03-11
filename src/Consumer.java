@@ -6,23 +6,23 @@ import java.util.Random;
  *
  */
 public class Consumer implements Runnable {
-	
+
 	Box box;
-	
+
 	/**
 	 * 
 	 * @param box
 	 */
-	public Consumer(Box box){
+	public Consumer(Box box) {
 		this.box = box;
 	}
-	
+
 	/**
 	 * 
 	 */
-	public void run(){
-		Random rnd  = new Random();
-		for(String message = box.take(); !message.equals("DONE"); message = box.take()){
+	public void run() {
+		Random rnd = new Random();
+		for (String message = box.take(); !message.equals("DONE"); message = box.take()) {
 			try {
 				Thread.sleep(rnd.nextInt(350));
 			} catch (InterruptedException e) {
@@ -30,7 +30,7 @@ public class Consumer implements Runnable {
 				e.printStackTrace();
 			}
 			System.out.println(message);
-			
+
 		}
 	}
 }

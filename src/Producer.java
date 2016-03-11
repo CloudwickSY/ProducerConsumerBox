@@ -24,7 +24,7 @@ public class Producer implements Runnable {
 	 * 
 	 */
 	public void run() {
-		Random rnd  = new Random();
+		Random rnd = new Random();
 		String[] messages = { "Once", "upon", "a", "time", "there", "was", "a", "village", "hidden", "in", "the",
 				"mountains", "of", ".." };
 		for (String message : messages) {
