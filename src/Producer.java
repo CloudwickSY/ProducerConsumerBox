@@ -28,7 +28,7 @@ public class Producer implements Runnable {
 		try {
 			Random rnd = new Random();
 			String[] messages = { "Once", "upon", "a", "time", "there", "was", "a", "village", "hidden", "in", "the",
-					"mountains", "of", ".." };
+					"mountains", "of", "BlueBunny." };
 			for (String message : messages) {
 				Thread.sleep(rnd.nextInt(350));
 				bq.put(message);
