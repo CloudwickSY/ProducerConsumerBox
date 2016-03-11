@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * 
@@ -10,32 +11,32 @@ public class Producer implements Runnable {
 	/**
 	 * 
 	 */
-	Box box;
+	BlockingQueue<String> bq;
 
 	/**
 	 * 
 	 * @param box
 	 */
-	public Producer(Box box) {
-		this.box = box;
+	public Producer(BlockingQueue<String> bq) {
+		this.bq = bq;
 	}
 
 	/**
 	 * 
 	 */
 	public void run() {
-		Random rnd = new Random();
-		String[] messages = { "Once", "upon", "a", "time", "there", "was", "a", "village", "hidden", "in", "the",
-				"mountains", "of", ".." };
-		for (String message : messages) {
-			try {
+		try {
+			Random rnd = new Random();
+			String[] messages = { "Once", "upon", "a", "time", "there", "was", "a", "village", "hidden", "in", "the",
+					"mountains", "of", ".." };
+			for (String message : messages) {
 				Thread.sleep(rnd.nextInt(350));
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				bq.put(message);
 			}
-			box.put(message);
+			bq.put("DONE");
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		box.put("DONE");
 	}
 }

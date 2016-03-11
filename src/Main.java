@@ -1,3 +1,6 @@
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
 /**
  * 
  * @author Stanislav
@@ -5,14 +8,15 @@
  */
 public class Main {
 	public static void main(String[] args) {
-		Box b = new Box();
 		int threadCount = 10;
+		int bqSize = 10;
+		BlockingQueue<String> bq = new ArrayBlockingQueue<String>(bqSize);
 		Thread[] prodPool = new Thread[threadCount];
 		Thread[] custPool = new Thread[threadCount];
 
 		for (int i = 0; i < threadCount; i++) {
-			prodPool[i] = new Thread(new Producer(b));
-			custPool[i] = new Thread(new Consumer(b));
+			prodPool[i] = new Thread(new Producer(bq));
+			custPool[i] = new Thread(new Consumer(bq));
 			prodPool[i].start();
 			custPool[i].start();
 		}
