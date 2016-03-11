@@ -8,15 +8,20 @@ import java.util.LinkedList;
  *
  */
 public class Box {
-	private LinkedList<String> messages;
-	int maxQueueSize;
+	private String[] messages;
+	private int maxQueueSize;
+	private int elementsIn;
+	private int pop, push;
 
 	/**
 	 * Initialize isEmpty to true, since none has written yet
 	 */
 	Box() {
-		this.messages = new LinkedList<String>();
+		this.messages = new String[maxQueueSize];
 		this.maxQueueSize = 10;
+		this.pop = 0;
+		this.push = 0;
+		this.elementsIn = 0;
 	}
 
 	/**
@@ -25,16 +30,27 @@ public class Box {
 	 * @return
 	 */
 	public synchronized String take() {
-		while (messages.isEmpty()) {
+		while (this.isEmpty()) {
 			try {
 				wait();
 			} catch (InterruptedException e) {
 				System.out.println("oops..");
 			}
 		}
-		String message = messages.pop();
+		String message = this.pop();
 		notifyAll();
 		return message;
+	}
+
+	private String pop() {
+		String message = this.messages[this.pop];
+		this.pop = this.pop++ % this.maxQueueSize;
+		this.elementsIn--;
+		return null;
+	}
+
+	private boolean isEmpty() {
+		return this.elementsIn == 0;
 	}
 
 	/**
@@ -43,14 +59,24 @@ public class Box {
 	 * @param message
 	 */
 	public synchronized void put(String message) {
-		while (messages.size() >= maxQueueSize) {
+		while (this.hasSpace()) {
 			try {
 				wait();
 			} catch (InterruptedException e) {
 				System.out.println("oops..");
 			}
 		}
-		this.messages.push(message);
+		this.push(message);
 		notifyAll();
+	}
+
+	private void push(String message) {
+		this.messages[this.push] = message;
+		this.push = this.push++ % this.maxQueueSize;
+		this.elementsIn++;
+	}
+
+	private boolean hasSpace() {
+		return (this.maxQueueSize - elementsIn - 1) > 0;
 	}
 }
