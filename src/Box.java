@@ -46,7 +46,7 @@ public class Box {
 		String message = this.messages[this.pop];
 		this.pop = this.pop++ % this.maxQueueSize;
 		this.elementsIn--;
-		return null;
+		return message;
 	}
 
 	private boolean isEmpty() {
